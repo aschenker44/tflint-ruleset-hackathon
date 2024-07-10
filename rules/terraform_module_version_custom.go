@@ -31,7 +31,7 @@ func NewTerraformModuleVersionRule() *TerraformModuleVersionRule {
 
 // Name returns the rule name
 func (r *TerraformModuleVersionRule) Name() string {
-	return "terraform_module_version_custom"
+	return "terraform_module_version_err"
 }
 
 // Enabled returns whether the rule is enabled by default
@@ -41,7 +41,7 @@ func (r *TerraformModuleVersionRule) Enabled() bool {
 
 // Severity returns the rule severity
 func (r *TerraformModuleVersionRule) Severity() tflint.Severity {
-	return tflint.WARNING
+	return tflint.ERROR
 }
 
 // Link returns the rule reference link
@@ -52,7 +52,8 @@ func (r *TerraformModuleVersionRule) Link() string {
 // Check checks whether module source attributes resolve to a Terraform registry
 // If they do, it checks a version (or range) is set
 func (r *TerraformModuleVersionRule) Check(rr tflint.Runner) error {
-	runner := rr.(*terraform.Runner)
+
+	runner := terraform.NewRunner(rr)
 
 	path, err := runner.GetModulePath()
 	if err != nil {
